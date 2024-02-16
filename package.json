@@ -4,7 +4,6 @@
   "description": "MERN estate app",
   "main": "backend/server.js",
   "type": "module",
-
   "scripts": {
     "dev": "nodemon backend/server.js",
     "start": "node backend/server.js"
@@ -12,6 +11,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "colors": "^1.4.0",
     "cors": "^2.8.5",
     "dotenv": "^16.4.4",
     "express": "^4.18.2",

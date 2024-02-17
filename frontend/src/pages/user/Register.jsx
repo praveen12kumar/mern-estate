@@ -47,7 +47,7 @@ const Register = () => {
       email:"",
       password:""
     })
-    navigate('/');
+    navigate('/login');
     } catch (error) {
       setLoading(false);
       setError(error.message);
@@ -61,7 +61,7 @@ const Register = () => {
         <form className="form" onSubmit={handleSubmit}>
             <input type="text" placeholder='username' name='username' value={formData.username} onChange={handleInput}/>
             <input type="text" placeholder='email' name='email' value={formData.email} onChange={handleInput}/>
-            <input type="text" placeholder='password' name='password' value={formData.password} onChange={handleInput}/>
+            <input type="password" placeholder='password' name='password' value={formData.password} onChange={handleInput}/>
             <button disabled={loading} type='submit'>{loading ? "Loading..." : "Register"}</button>
         </form>
         <div className="have-an-account">

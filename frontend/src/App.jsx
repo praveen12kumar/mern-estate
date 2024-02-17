@@ -2,9 +2,9 @@ import React from 'react'
 import {Routes, Route} from "react-router-dom";
 import Home from "./pages/Home";
 import About from "./pages/About";
-import Login from "./pages/user/Login";
-import Register from './pages/user/Register';
-import Profile from "./pages/user/Profile";
+import Login from "./features/user/Login";
+import Register from './features/user/Register';
+import Profile from "./features/user/Profile";
 import Header from './components/Header';
 
 

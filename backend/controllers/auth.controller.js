@@ -6,8 +6,15 @@ import { sendToken } from "../utils/jwtToken.js";
 const register = async(req, res, next)=>{
     try {
         const {username, email, password} = req.body;
+
+        let user = await User.findOne({email});
+
+        if(user){
+            return next(errorHandler(409, "user already registered"))
+        }
+
         const hassedPassword = bcrypt.hashSync(password, 10);
-        const user = await User.create({username, email, password:hassedPassword});
+        user = await User.create({username, email, password:hassedPassword});
       
         res.status(200).json({
             success: true,

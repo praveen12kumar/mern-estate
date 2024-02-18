@@ -1,5 +1,5 @@
 import User from "../models/user.model.js";
-import bcrypt from "bcryptjs";
+import bcryptjs from "bcryptjs";
 import { errorHandler } from "../utils/errorHandler.js";
 import { sendToken } from "../utils/jwtToken.js";
 
@@ -51,9 +51,32 @@ const login = async(req, res, next) => {
        }
       
        sendToken(user, 200, res)
+    } catch (error) {
+        next(error);
+    }
+}
 
-       
+const googleRegister = async (req, res, next) => {
+    const {email, username, avatar} = req.body;
+    
+    try {
+        let user = await User.findOne({email});
 
+        if(user){
+            sendToken(user, 200, res);
+        }
+        else{
+            const generatedPassword = Math.random().toString(36).slice(-8) + Math.random().toString(36).slice(-8);
+            const hashedPassword = bcryptjs.hashSync(generatedPassword, 10);
+            user = await User.create({
+                username: username.split(" ").join("").toLowerCase()+Math.random().toString(36).slice(-4),
+                email,
+                password: hashedPassword,
+                avatar
+            })
+
+            sendToken(user, 200, res);
+        }
     } catch (error) {
         next(error);
     }
@@ -63,5 +86,6 @@ const login = async(req, res, next) => {
 
 export {
     register,
-    login
+    login,
+    googleRegister,
 }

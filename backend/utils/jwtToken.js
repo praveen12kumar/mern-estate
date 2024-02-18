@@ -20,7 +20,7 @@ const sendToken = (user, statusCode, res) => {
                 _id: user._id,
                 username: user.username,
                 email: user.email,
-                // avatar:user.avatar,
+                avatar:user.avatar,
                 // ... other necessary fields
             },
             token,

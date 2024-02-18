@@ -6,7 +6,7 @@ import Login from "./features/user/Login";
 import Register from './features/user/Register';
 import Profile from "./features/user/Profile";
 import Header from './components/Header';
-
+import ProtectedRoute from './components/ProtectedRoute';
 
 const App = () => {
   return (
@@ -17,7 +17,9 @@ const App = () => {
         <Route path='/about' element={<About/>}/>
         <Route path='/login' element={<Login/>}/>
         <Route path='/register' element={<Register/>}/>
-        <Route path='/profile' element={<Profile/>}/>
+        <Route path='/profile' element={<ProtectedRoute>
+          <Profile/>
+        </ProtectedRoute>}/>
 
     </Routes>
     </div>

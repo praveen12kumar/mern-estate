@@ -33,10 +33,10 @@ const Register = () => {
         dispatch(clearErrors());
       }
       dispatch(clearStatus());
-
   }
 
   useEffect(()=>{
+    dispatch(clearErrors());
     if(status === "success"){
       navigate("/login");
     }

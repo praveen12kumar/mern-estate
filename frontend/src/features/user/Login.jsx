@@ -5,6 +5,7 @@ import { clearStatus, loginUser } from './authSlice';
 import { clearErrors } from './authSlice';
 
 import "./register.scss";
+import OAuth from '../../components/oAuth/OAuth';
 
 
 const Login = () => {
@@ -53,6 +54,7 @@ const Login = () => {
             <input type="text" placeholder='email' name='email' value={formData.email} onChange={handleInput}/>
             <input type="password" placeholder='password' name='password' value={formData.password} onChange={handleInput}/>
             <button disabled={status === "pending"} type='submit'>{status === "pending" ? "Loading..." : "Login"}</button>
+            <OAuth/>
         </form>
         <div className="have-an-account">
           <p>Don't have an account?</p>

@@ -3,6 +3,7 @@ import { config } from "dotenv";
 import userRouter from "./routes/user.router.js";
 import authRouter from "./routes/auth.router.js"
 import { errorMiddleware } from "./middlerwares/errorMiddleware.js";
+import cookieParser from "cookie-parser";
 
 config({
     path:"backend/config/config.env",
@@ -10,6 +11,8 @@ config({
 
 const app = express();
 app.use(express.json());
+app.use(cookieParser());
+
 
 app.use("/api/v1", userRouter); // user routes
 app.use("/api/v1", authRouter); // auth routes

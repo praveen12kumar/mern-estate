@@ -1,8 +1,8 @@
 import express from 'express';
-import { mockApi } from '../controllers/user.controller.js';
-
+import { updateUserProfile } from '../controllers/auth.controller.js';
+import { isAuthenticatedUser } from '../middlerwares/auth.js';
 
 const router = express.Router();
-router.get("/users", mockApi);
+router.put("/user/update/:id", isAuthenticatedUser, updateUserProfile);
 
 export default router;

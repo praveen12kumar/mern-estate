@@ -33,6 +33,7 @@ const Login = () => {
       if(error){
         dispatch(clearErrors());
       }
+      navigate("/");
      
   }
 
@@ -43,7 +44,7 @@ const Login = () => {
         email:"",
         password:""
       });
-      navigate("/");
+  
     }
   },[user, navigate, status])
 

@@ -31,7 +31,7 @@ const Header = () => {
            {
             isAuthenticated ? (
               <div className="w-10 flex items-center">
-                <img className='rounded-3xl' src={user.avatar} alt="profile" />
+                <img className='rounded-3xl' src={user?.avatar} alt="profile" />
               </div>
             ) :
             ( <li className='text-lg font-medium transition duration-2500 ease-out hover:text-blue-900'>Login</li>)

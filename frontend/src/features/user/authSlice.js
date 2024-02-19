@@ -61,6 +61,24 @@ export const googleSignIn = createAsyncThunk("auth/signinWithGoogle", async({use
     }
 })
 
+// Update user profile
+export const updateUserProfile = createAsyncThunk("auth/updateUserProfile", async({formData, id}, thunkAPI)=>{
+    console.log("formData", formData, id)
+    try {
+        const config = {
+            headers:{
+                "Content-Type": "application/json"
+            }
+        };
+        const {data} = await axios.put(`/api/v1/user/update/${id}`,{...formData}, config);
+        console.log("data",data);
+        return data;
+    } catch (error) {
+        console.log("error",error)
+        return thunkAPI.rejectWithValue(error.response.data);
+    }
+})
+
 
 export const authSlice = createSlice({
     name: "auth",
@@ -76,6 +94,7 @@ export const authSlice = createSlice({
 
     extraReducers:(builder)=>{
         builder
+            //register
             .addCase(registerUser.pending, (state)=>{
                 state.status = "pending";
             })
@@ -88,6 +107,7 @@ export const authSlice = createSlice({
                 state.status = "error";
                 state.error = action.payload.message;
             })
+            // login
             .addCase(loginUser.pending, (state)=>{
                 state.status = "pending";
             })
@@ -95,12 +115,14 @@ export const authSlice = createSlice({
                 state.status = "success";
                 state.user = action.payload.user;
                 state.isAuthenticated = true;
+                state.error = null;
             })
             .addCase(loginUser.rejected, (state, action)=>{
                 state.status = "error";
                 state.error = action.payload.message;
                 state.isAuthenticated = false;
             })
+            // register with gooogle
             .addCase(googleSignIn.pending,(state)=>{
                 state.status = "pending";
             })
@@ -108,11 +130,25 @@ export const authSlice = createSlice({
                 state.status = "success";
                 state.user = action.payload.user;
                 state.isAuthenticated = true;
+                state.error = null;
             })
             .addCase(googleSignIn.rejected,(state, action)=>{
                 state.status = "error";
                 state.error = action.payload.message;
                 state.isAuthenticated = false;
+            })
+            //update profile
+            .addCase(updateUserProfile.pending,(state)=>{
+                state.status = "pending";
+            })
+            .addCase(updateUserProfile.fulfilled,(state, action)=>{
+                state.status = "success";
+                state.user = action.payload.user;
+                state.error = null;
+            })
+            .addCase(updateUserProfile.rejected, (state,action)=>{
+                state.status = "error";
+                state.error = action.payload.message;
             })
     }
 

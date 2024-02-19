@@ -1,10 +1,10 @@
 import React, {useEffect, useState} from 'react';
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import {getDownloadURL, getStorage, ref, uploadBytesResumable} from "firebase/storage";
 import { useRef } from 'react';
 import {app} from "../../../firebase";
 import "./profile.scss";
-
+import { clearErrors, updateUserProfile } from './authSlice';
 
 
 // firebase rules
@@ -14,7 +14,10 @@ import "./profile.scss";
       // request.resource.contentType.matches('image/.*')
 
 const Profile = () => {
-  const {user} = useSelector((state)=> state.auth);
+  const dispatch = useDispatch();
+  const {user, status, error} = useSelector((state)=> state.auth);
+
+
   const fileRef = useRef(null);
   const [file, setFile] = useState(undefined);
   const [percentage, setPercentage] = useState(0);
@@ -27,7 +30,7 @@ const Profile = () => {
       const storageRef = ref(storage, fileName);
       const uploadTask = uploadBytesResumable(storageRef, file);
 
-      uploadTask.on('state+changed',
+      uploadTask.on('state_changed',
         (snapshot)=>{
           const progress = (snapshot.bytesTransferred/snapshot.totalBytes) * 100;
           // console.log('upload is ' + progress + '% done')
@@ -45,13 +48,29 @@ const Profile = () => {
   }
 
 
-  const handleSubmit = () => {}
+  const handleSubmit = (e) => {
+    console.log(user._id)
+    e.preventDefault();
+    dispatch(updateUserProfile({formData, id:user._id}));
+
+    if(error){
+      dispatch(clearErrors());
+    }
+  }
+
+  const handleChange = (e) => {
+    setFormData({
+      ...formData, [e.target.name]: e.target.value 
+    });
+
+  }
 
 
   useEffect(()=>{
     if(file){
       handleFileUpload(file);
     }
+   
   },[file])
 
 
@@ -72,16 +91,17 @@ const Profile = () => {
           ) : (
             ''
           )}
-        <input type="text" placeholder='username' value={user?.username} />
-        <input type="email" placeholder='email' value={user?.email} />
-        <input type="password" placeholder="password" value={user?.password} />
-        <button>Update</button>
+        <input type="text" placeholder='username' name="username"  defaultValue={user?.username} onChange={handleChange} />
+        <input type="email" placeholder='email' defaultValue={user?.email} name="email" onChange={handleChange} />
+        <input type="password" placeholder="password" defaultValue={user.password} name="password" onChange={handleChange} />
+        <button disabled={status === "pending"} type='submit'>{status === "pending" ? "Loading..." : "update"}</button>
 
       </form>
       <div className="">
         <span>Delete Account</span>
         <span>Sign Out</span>
       </div>
+      <p>{error ? error : ""}</p>
     </div>
   )
 }

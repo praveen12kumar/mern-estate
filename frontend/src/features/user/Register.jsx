@@ -32,7 +32,7 @@ const Register = () => {
       if(error){
         dispatch(clearErrors());
       }
-      dispatch(clearStatus());
+      
   }
 
   useEffect(()=>{

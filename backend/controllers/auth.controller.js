@@ -13,7 +13,7 @@ const register = async(req, res, next)=>{
             return next(errorHandler(409, "user already registered"))
         }
 
-        const hassedPassword = bcrypt.hashSync(password, 10);
+        const hassedPassword = bcryptjs.hashSync(password, 10);
         user = await User.create({username, email, password:hassedPassword});
       
         res.status(200).json({
@@ -80,12 +80,51 @@ const googleRegister = async (req, res, next) => {
     } catch (error) {
         next(error);
     }
-}
+};
 
 
+// update user profile
+// before updating the user profile we need to verify the user is genuine or not
+// so we to create a middleware
+
+const updateUserProfile = async(req, res, next) => {
+    try {
+        if(req.user.id !== req.params.id){
+            return next(errorHandler(401, "You can only update you own account"));
+        }
+
+        if(req.body.password){
+            req.body.password = bcryptjs.hashSync(req.body.password, 10);
+        }
+
+        const updatedUser = await User.findByIdAndUpdate(req.params.id,{
+            $set:{
+                username: req.body.username,
+                email: req.body.email,
+                password: req.body.password,
+                avatar: req.body.avatar,
+            }
+        },{new:true})
+
+        res.status(200).json({
+            message:"User profile updated successfully",
+            user:{
+                _id: updatedUser._id,
+                username: updatedUser.username,
+                email: updatedUser.email,
+                avatar: updatedUser.avatar
+            }
+
+        })
+
+    } catch (error) {
+        next(error)
+    }
+};
 
 export {
     register,
     login,
     googleRegister,
+    updateUserProfile
 }

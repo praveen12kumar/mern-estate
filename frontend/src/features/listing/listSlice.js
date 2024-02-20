@@ -16,7 +16,6 @@ export const createListing = createAsyncThunk("listing/createListing", async(for
             }
         }
         const {data} = await axios.post("/api/v1/listing/create", {...formData}, config);
-        console.log("data", data);
         return data;
     } catch (error) {
         return thunkApi.rejectWithValue(error.response.data);       
@@ -32,6 +31,16 @@ export const getUserListing = createAsyncThunk("listing/getUserListing",async(id
         return thunkApi.rejectWithValue(error.response.message); 
     }
 } );
+
+// delete user listing
+export const deleteUserListing = createAsyncThunk("listing/deleteUserListing",async(id, thunkApi)=>{
+    try {
+        const {data} = await axios.delete(`/api/v1/listing/${id}`);
+        return data;
+    } catch (error) {
+        return thunkApi.rejectWithValue(error.response.message);
+    }
+})
 
 
 
@@ -56,7 +65,7 @@ export const listingSlice = createSlice({
                 state.status = "pending";
             })
             .addCase(createListing.fulfilled, (state, action)=>{
-                state.listing = action.payload.listing;
+                state.listing.push(action.payload.listing);
                 state.status = "success";
             })
             .addCase(createListing.rejected, (state, action)=>{
@@ -74,6 +83,17 @@ export const listingSlice = createSlice({
                 state.status = "error";
                 state.error = action.payload;
             })
+            .addCase(deleteUserListing.pending, (state)=>{
+                state.status = "pending";
+            })
+            .addCase(deleteUserListing.fulfilled, (state, action )=>{
+                state.status = "success";
+                state.listing = state.listing.filter((list)=> list._id !== action.payload.listing._id);
+            })
+            .addCase(deleteUserListing.rejected, (state, action)=>{
+                state.status = "error";
+                state.error = action.payload;
+            });
     }
 });
 

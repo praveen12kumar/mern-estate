@@ -6,7 +6,7 @@ import { useRef } from 'react';
 import {app} from "../../../firebase";
 import "./profile.scss";
 import { clearErrors, updateUserProfile, deleteUserProfile, logoutUser } from './authSlice';
-import { getUserListing } from '../listing/listSlice';
+import { getUserListing, deleteUserListing } from '../listing/listSlice';
 
 // firebase rules
       // allow read;
@@ -84,7 +84,15 @@ const Profile = () => {
     if(error){
       clearErrors();
     }
-}
+  }
+
+  const handleDeleteList = (list) => {
+    dispatch(deleteUserListing(list._id));
+
+    if(error){
+      clearErrors();
+    }
+  }
 
 
   useEffect(()=>{
@@ -133,7 +141,7 @@ const Profile = () => {
               <p>{list.name}</p>
             </div>
             <div className="list-buttons">
-              <button className='list-delete'>Delete</button>
+              <button onClick={()=>handleDeleteList(list)} className='list-delete'>Delete</button>
               <button className='list-edit'>Edit</button>
             </div>
           </div>

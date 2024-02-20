@@ -14,7 +14,7 @@ const Listing = () => {
   const navigate = useNavigate();
   const {user} = useSelector((state)=> state.auth);
   const {error, status, listing} = useSelector((state)=> state.listing);
-  console.log("listing", listing);
+
 
 
   const [files, setFiles] = useState([]);

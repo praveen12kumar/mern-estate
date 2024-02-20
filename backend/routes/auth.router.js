@@ -10,9 +10,9 @@ import {
 
 const router = express.Router();
 
-router.post("/auth/register", register);
-router.post("/auth/login", login);
-router.post("/auth/google", googleRegister);
+router.post("/register", register);
+router.post("/login", login);
+router.post("/google", googleRegister);
 
 
 

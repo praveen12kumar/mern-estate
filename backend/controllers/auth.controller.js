@@ -74,7 +74,6 @@ const googleRegister = async (req, res, next) => {
                 password: hashedPassword,
                 avatar
             })
-
             sendToken(user, 200, res);
         }
     } catch (error) {
@@ -114,7 +113,6 @@ const updateUserProfile = async(req, res, next) => {
                 email: updatedUser.email,
                 avatar: updatedUser.avatar
             }
-
         })
 
     } catch (error) {
@@ -122,9 +120,41 @@ const updateUserProfile = async(req, res, next) => {
     }
 };
 
+
+const deleteUser = async (req, res, next)=>{
+    try {
+        if(req.user.id !== req.params.id){
+            return next(errorHandler(401, "You can only delete your own account"))
+        }
+
+        await User.findByIdAndDelete(req.params.id);
+        res.clearCookie('access_token');
+        res.status(200).json({
+            message:"User deleted successfully",
+        })
+    } catch (error) {
+        next(error);
+    }
+}
+
+const logout = async (req, res, next)=>{
+    try {
+        res.clearCookie("access_token");
+        res.status(200).json({
+            message:"User logged out successfully",
+        });
+    } catch (error) {
+        next(error);
+    }
+}
+
+
 export {
     register,
     login,
     googleRegister,
-    updateUserProfile
+    updateUserProfile,
+    deleteUser,
+    logout,
+
 }

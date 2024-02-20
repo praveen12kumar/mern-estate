@@ -13,7 +13,8 @@ const Login = () => {
   const dispatch = useDispatch();
 
   const {error, status, user} = useSelector(state => state.auth);
-
+  console.log(user);
+  
   const [formData, setformData] = useState({
     email:"",
     password:""
@@ -44,8 +45,8 @@ const Login = () => {
         email:"",
         password:""
       });
-  
     }
+
   },[user, navigate, status])
 
   return (

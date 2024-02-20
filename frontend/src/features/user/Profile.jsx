@@ -1,11 +1,12 @@
 import React, {useEffect, useState} from 'react';
 import { useSelector, useDispatch } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
 import {getDownloadURL, getStorage, ref, uploadBytesResumable} from "firebase/storage";
 import { useRef } from 'react';
 import {app} from "../../../firebase";
 import "./profile.scss";
-import { clearErrors, updateUserProfile } from './authSlice';
-
+import { clearErrors, updateUserProfile, deleteUserProfile, logoutUser } from './authSlice';
+import { getUserListing } from '../listing/listSlice';
 
 // firebase rules
       // allow read;
@@ -14,9 +15,11 @@ import { clearErrors, updateUserProfile } from './authSlice';
       // request.resource.contentType.matches('image/.*')
 
 const Profile = () => {
+  const navigate = useNavigate();
   const dispatch = useDispatch();
   const {user, status, error} = useSelector((state)=> state.auth);
 
+  const {listing} = useSelector((state)=> state.listing);
 
   const fileRef = useRef(null);
   const [file, setFile] = useState(undefined);
@@ -62,8 +65,26 @@ const Profile = () => {
     setFormData({
       ...formData, [e.target.name]: e.target.value 
     });
-
   }
+
+  const handleDeleteProfile = () => {
+      dispatch(deleteUserProfile({id:user._id}));
+      navigate('/login');
+  }
+
+  const handleLogout = () => {
+    dispatch(logoutUser());
+    navigate('/login');
+  }
+
+
+  const handleShowListing = () => {
+    dispatch(getUserListing(user._id));
+    
+    if(error){
+      clearErrors();
+    }
+}
 
 
   useEffect(()=>{
@@ -94,14 +115,30 @@ const Profile = () => {
         <input type="text" placeholder='username' name="username"  defaultValue={user?.username} onChange={handleChange} />
         <input type="email" placeholder='email' defaultValue={user?.email} name="email" onChange={handleChange} />
         <input type="password" placeholder="password" defaultValue={user.password} name="password" onChange={handleChange} />
-        <button disabled={status === "pending"} type='submit'>{status === "pending" ? "Loading..." : "update"}</button>
-
+        <button className='update-profile-btn' disabled={status === "pending"}  type='submit'>{status === "pending" ? "Loading..." : "update"}</button>
+        <button className='create-list-btn' onClick={()=> navigate('/listing')}  > Create Listing</button>
+     
       </form>
       <div className="">
-        <span>Delete Account</span>
-        <span>Sign Out</span>
+        <span onClick={handleDeleteProfile}>Delete Account</span>
+        <span onClick={handleLogout}>Logout</span>
       </div>
       <p>{error ? error : ""}</p>
+      <button onClick={handleShowListing}>Show Listing</button>
+      {
+        listing && listing?.map((list)=>(
+          <div className="user-listing" key={list._id}>
+            <div className="">
+              <img src={list.imageUrls[0]} alt="listing" />
+              <p>{list.name}</p>
+            </div>
+            <div className="list-buttons">
+              <button className='list-delete'>Delete</button>
+              <button className='list-edit'>Edit</button>
+            </div>
+          </div>
+        ))
+      }
     </div>
   )
 }

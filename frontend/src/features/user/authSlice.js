@@ -6,7 +6,8 @@ const initialState ={
     error:null,
     status:"idle",
     token:null,
-    isAuthenticated:false
+    isAuthenticated:false,
+    message:"",
 }
 // register user
 export const registerUser = createAsyncThunk("auth/registerUser", async({username, email, password},thunkAPI)=>{
@@ -79,6 +80,28 @@ export const updateUserProfile = createAsyncThunk("auth/updateUserProfile", asyn
     }
 })
 
+// delete user
+export const deleteUserProfile = createAsyncThunk("auth/deleteUser", async({id}, thunkAPI)=>{
+    try {
+        const {data} = await axios.delete( `/api/v1/user/delete/${id}`)
+        console.log("data",data)
+        return data;
+    } catch (error) {
+        console.log("error",error)
+        return thunkAPI.rejectWithValue(error.response.data);
+    }
+});
+
+export const logoutUser = createAsyncThunk("auth/logoutUser", async(thunkAPI)=>{
+    try {
+        const {data} = await axios.get( `/api/v1/user/logout`);
+        return data;
+    } catch (error) {
+        console.log("error",error)
+        return thunkAPI.rejectWithValue(error.response.data);
+    }
+});
+
 
 export const authSlice = createSlice({
     name: "auth",
@@ -150,8 +173,37 @@ export const authSlice = createSlice({
                 state.status = "error";
                 state.error = action.payload.message;
             })
-    }
 
+            // delete user profile
+            .addCase(deleteUserProfile.pending,(state)=>{
+                state.status = "pending";
+            })
+            .addCase(deleteUserProfile.fulfilled,(state, action)=>{
+                state.status = "success";
+                state.user = {};
+                state.isAuthenticated = false;
+                state.message = action.payload.message;
+                state.error = null;
+            })
+            .addCase(deleteUserProfile.rejected,(state, action)=>{
+                state.status = "error";
+                state.error = action.payload.message;
+            })
+            // logout user
+            .addCase(logoutUser.pending,(state)=>{
+                state.status = "pending";
+            })
+            .addCase(logoutUser.fulfilled,(state, action)=>{
+                state.status = "success";
+                state.user = {};
+                state.isAuthenticated = false;
+                state.message = action.payload.message;
+            })
+            .addCase(logoutUser.rejected, (state, action)=>{
+                state.error = action.payload.message;
+                state.status = "error"
+            })
+        }
 });
 
 

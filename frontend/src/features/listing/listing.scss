@@ -1,0 +1,190 @@
+.listing{
+    max-width: 60%;
+    min-height: 100vh;
+    margin: 0 auto;
+    padding: 1rem;
+    display: flex;
+    flex-direction: column;
+    >h1{
+        text-align: center;
+        font-size: 2rem;
+        font-family: "poppins";
+        font-weight: 600;
+        margin: 2rem 0;
+    }
+    >main{
+        display: flex;
+        justify-content: space-between;
+    
+        >.listing-left{
+            flex:1; 
+            display: flex;
+            flex-direction: column;
+
+            >.list-inputs{
+                display: flex;
+                flex-direction: column;
+                gap: 1rem;
+                >input{
+                    width: 85%;
+                    border-radius: 15px;
+                    background-color: white;
+                    padding: 0.6rem;
+                    border: 1px solid lightgray;
+                }
+                >textarea{
+                    width: 85%;
+                    background-color: white;
+                    padding: 1rem;
+                    border-radius: 15px;
+                    border: 1px solid lightgray;
+                }
+            }
+            >.facilities{
+                display: flex;
+                flex-wrap: wrap;
+                gap: 2rem;
+                margin: 1rem 0;
+                >div{
+                    margin: 0 1rem;
+                    display: flex;
+                    align-items: center;
+                    >input{
+                        width: 25px;
+                        height: 25px;
+                        padding: 1rem;
+                        border: none;
+                        outline: none;
+                        margin-right: 10px;
+                    }
+                    >label{
+                    font-family: "poppins";
+                    }
+                    
+                }
+            }
+            >.beds-baths{
+                display: flex;
+                align-items: center;
+                gap: 2rem;
+                margin: 1rem 0;
+               >div{
+                display: flex;
+                align-items: center;
+                >input{
+                    padding: 1rem;
+                    border: 1px solid lightgray;
+                    border-radius: 10px;
+                    margin-right: 10px;
+                    font-size: 1rem;
+                }
+                >label{
+                    font-family: "poppins";
+                    }
+                }
+            }
+            >.list-price{
+                display: flex;
+                flex-direction: column;
+                gap: 10px;
+                margin: 1rem 0;
+                >div{
+                    display: flex;
+                    gap: 20px;
+                    >input{
+                        padding-left: 15px;
+                    }
+
+                    >p{
+                        font-family: "poppins";
+                    }
+                   
+                }
+            }
+        }
+        >.listing-right{
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+            p{
+                color: rgb(80, 79, 79);
+                span{
+                    font-weight: 600;
+                    font-size: 1.1rem;
+                }
+            }
+            >div{
+                display: flex;
+                align-items: center;
+                gap: 1rem;
+                >input{
+                    border: 1px solid rgb(188, 188, 188);
+                    padding: 1rem;
+                    border-radius: 10px;
+                }
+                >button{
+                    padding: 1rem;
+                    border-radius: 10px;
+                    font-size: 1.1rem;
+                    border: 1px solid green;
+                    text-transform: uppercase;
+                    font-weight: 500;
+                    cursor: pointer;
+                    transition: all 0.3s ease-in;
+                }
+                >button:hover{
+                    opacity: 0.8;
+                }
+            }
+            >button{
+                width: 90%;
+                padding: 1rem;
+                margin-top: 2rem;
+                border-radius: 10px;
+                background-color: #3C4A5D;
+                color: white;
+                font-size: 1.1rem;
+                text-transform:uppercase;
+                cursor: pointer;
+                transition: all 0.4s ease-in;
+            }
+            >button:hover{
+                background-color: #3c4a5de0;
+            }
+            >.list-image-container{
+                display: flex;
+                flex-direction: column;
+                gap: 20px;
+            }
+
+
+
+            }
+        }
+}
+
+
+@media screen and (max-width:768px){
+    .listing{
+        margin-bottom: 4rem;
+        >h1{
+            font-size: 1.5rem;
+            margin-top: 1rem;
+        }
+    }
+    main{
+        flex-direction: column;
+    }
+    .list-inputs{
+        gap: 0.8rem;
+        >input{
+            width: 90%;
+            padding: 0.6rem;
+        }
+        >textarea{
+            width: 90%;
+        }
+    }
+    
+}

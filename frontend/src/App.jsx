@@ -9,7 +9,7 @@ import Header from './components/Header';
 import ProtectedRoute from './components/ProtectedRoute';
 import Listing from './features/listing/Listing.jsx';
 import SingleList from './features/listing/SingleList.jsx';
-
+import UpdateListing from './features/listing/UpdateListing.jsx';
 
 const App = () => {
   return (
@@ -25,6 +25,7 @@ const App = () => {
         </ProtectedRoute>}/>
         <Route path='/listing' element={<Listing/>}/>
         <Route path='/listing/:id' element={<SingleList/>}/>
+        <Route path='/update-listing/:id' element={<UpdateListing/>}/>
     </Routes>
     </div>
   )

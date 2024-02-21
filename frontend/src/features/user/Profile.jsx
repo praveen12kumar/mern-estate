@@ -142,7 +142,7 @@ const Profile = () => {
             </div>
             <div className="list-buttons">
               <button onClick={()=>handleDeleteList(list)} className='list-delete'>Delete</button>
-              <button className='list-edit'>Edit</button>
+              <button onClick={()=> navigate(`/update-listing/${list._id}`)} className='list-edit'>Edit</button>
             </div>
           </div>
         ))

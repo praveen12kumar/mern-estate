@@ -55,7 +55,7 @@ export const googleSignIn = createAsyncThunk("auth/signinWithGoogle", async({use
             }
         };
         const {data} = await axios.post("/api/v1/auth/google", {username, email, avatar}, config);
-        console.log("data",data)
+        // console.log("data",data)
         return data;
     } catch (error) {
         return thunkAPI.rejectWithValue(error.response.data);     

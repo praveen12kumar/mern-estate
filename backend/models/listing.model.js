@@ -1,6 +1,4 @@
 import mongoose  from "mongoose";
-
-
 const listSchema =  new mongoose.Schema({
     name:{
         type:String,
@@ -43,17 +41,17 @@ const listSchema =  new mongoose.Schema({
         required:true,
     },
     offer:{
-        type:String,
+        type:Boolean,
         required:true,
     },
     imageUrls:{
         type:Array,
         required:true,
     },
-    userRef:{
-        type:mongoose.Types.ObjectId,
-        required:true,
-    }
+    userRef: {
+        type: mongoose.Schema.Types.ObjectId,
+        required: true,
+    },    
 },{
     timestamps:true,
 });

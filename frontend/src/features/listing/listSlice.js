@@ -3,6 +3,7 @@ import axios from "axios";
 
 const initialState = {
     listing:[],
+    singleList:{},
     error:null,
     status:"idle",
 }
@@ -25,7 +26,7 @@ export const createListing = createAsyncThunk("listing/createListing", async(for
 // get user listing
 export const getUserListing = createAsyncThunk("listing/getUserListing",async(id, thunkApi)=>{
     try {
-        const {data} = await axios.get(`/api/v1/listing/${id}`);
+        const {data} = await axios.get(`/api/v1/listing/user/${id}`);
         return data;
     } catch (error) {
         return thunkApi.rejectWithValue(error.response.message); 
@@ -39,6 +40,30 @@ export const deleteUserListing = createAsyncThunk("listing/deleteUserListing",as
         return data;
     } catch (error) {
         return thunkApi.rejectWithValue(error.response.message);
+    }
+});
+
+// update user Listing
+
+export const updateUserListing = createAsyncThunk("listing/updateUserListing",async({formData, id}, thunkApi)=>{
+    try {
+        const config = {
+            "Content-Type": "application/json"
+        }
+        const {data} = await axios.put(`/api/v1/listing/update/${id}`,{...formData}, config) 
+        console.log("data", data);
+        return data;
+    } catch (error) {
+        return thunkApi.rejectWithValue(error.response.message);
+    }
+})
+
+export const getAListing = createAsyncThunk("listing/getAListing", async(id, thunkApi)=>{
+    try {
+        const {data} = await axios.get(`/api/v1/listing/list/${id}`);
+        return data;
+    } catch (error) {
+        return thunkApi.rejectWithValue(error.response.message); 
     }
 })
 
@@ -93,7 +118,35 @@ export const listingSlice = createSlice({
             .addCase(deleteUserListing.rejected, (state, action)=>{
                 state.status = "error";
                 state.error = action.payload;
-            });
+            })
+            .addCase(updateUserListing.pending, (state)=>{
+                state.status = "pending";
+            })
+            .addCase(updateUserListing.fulfilled, (state, action)=>{
+                state.status = "success";
+                const updatedListing = action.payload.listing; // Assuming the payload structure has a 'listing' property
+
+                // Create a new array with the updated object
+                state.listing = state.listing.map((list) =>
+                    list._id === updatedListing._id ? { ...list, ...updatedListing } : list
+                );
+            })
+            .addCase(updateUserListing.rejected, (state, action)=>{
+                state.status = "error";
+                state.error = action.payload;
+            })
+            .addCase(getAListing.pending, (state)=>{
+                state.status = "pending";
+            })
+            .addCase(getAListing.fulfilled, (state, action)=>{
+                state.status = "success";
+                state.singleList = action.payload;
+            })
+            .addCase(getAListing.rejected, (state, action)=>{
+                state.status = "error";
+                state.error = action.payload;
+            })
+            
     }
 });
 

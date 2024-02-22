@@ -100,7 +100,7 @@ const UpdateListing = () => {
           
       dispatch(updateUserListing({formData, id}));
       
-      navigate(`/listing/${listing._id}`);
+      navigate(`/listing/${id}`);
       
       if(error){
         dispatch(clearErrors());

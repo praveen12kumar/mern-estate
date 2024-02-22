@@ -1,6 +1,6 @@
 import Listing from "../models/listing.model.js";
 import {errorHandler} from "../utils/errorHandler.js";
-
+import User from "../models/user.model.js";
 
 const createList = async(req, res, next) => {
     try {
@@ -90,12 +90,30 @@ const deleteUserListing = async(req, res, next) => {
         }
     }
 
+    const getUserFromListing = async (req, res, next) => {
+        try {
+            const user = await User.findById(req.params.id);
+            if(!user){
+                return next(errorHandler(404, "user not found"));
+            }
+            res.status(200).json({
+                _id:user._id,
+                username:user.username,
+                email:user.email,
+                avatar:user.avatar,
+            })
+        } catch (error) {
+            next(error);
+        }
+    }
+
 
 
 export {createList,
 getUserListing,
 deleteUserListing,
 updateUserListing,
-getListing
+getListing,
+getUserFromListing,
 
 };

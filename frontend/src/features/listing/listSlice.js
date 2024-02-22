@@ -3,6 +3,7 @@ import axios from "axios";
 
 const initialState = {
     listing:[],
+    listingUser:{},
     singleList:{},
     error:null,
     status:"idle",
@@ -51,7 +52,7 @@ export const updateUserListing = createAsyncThunk("listing/updateUserListing",as
             "Content-Type": "application/json"
         }
         const {data} = await axios.put(`/api/v1/listing/update/${id}`,{...formData}, config) 
-        console.log("data", data);
+        // console.log("data", data);
         return data;
     } catch (error) {
         return thunkApi.rejectWithValue(error.response.message);
@@ -64,6 +65,17 @@ export const getAListing = createAsyncThunk("listing/getAListing", async(id, thu
         return data;
     } catch (error) {
         return thunkApi.rejectWithValue(error.response.message); 
+    }
+});
+
+export const getOwnerOfListing = createAsyncThunk("listing/getOwnerOfListing", async(id, thunkApi)=>{
+    try {
+        const {data} = await axios.get(`/api/v1/listing/user-details/${id}`);
+        // console.log(data);
+        return data;
+
+    } catch (error) {
+        return thunkApi.rejectWithValue(error.response.message);
     }
 })
 
@@ -124,12 +136,14 @@ export const listingSlice = createSlice({
             })
             .addCase(updateUserListing.fulfilled, (state, action)=>{
                 state.status = "success";
-                const updatedListing = action.payload.listing; // Assuming the payload structure has a 'listing' property
+                // const updatedListing = action.payload.listing; // Assuming the payload structure has a 'listing' property
 
-                // Create a new array with the updated object
-                state.listing = state.listing.map((list) =>
-                    list._id === updatedListing._id ? { ...list, ...updatedListing } : list
-                );
+                // // Create a new array with the updated object
+                // state.listing = state.listing.map((list) =>
+                //     list._id === updatedListing._id ? { ...list, ...updatedListing } : list
+                // );
+                const index = state.listing.findIndex(list => list._id === action.payload.listing._id);
+                state.listing.splice(index,1, action.payload.listing);
             })
             .addCase(updateUserListing.rejected, (state, action)=>{
                 state.status = "error";
@@ -143,6 +157,17 @@ export const listingSlice = createSlice({
                 state.singleList = action.payload;
             })
             .addCase(getAListing.rejected, (state, action)=>{
+                state.status = "error";
+                state.error = action.payload;
+            })
+            .addCase(getOwnerOfListing.pending,(state)=>{
+                state.status = "pending";
+            })
+            .addCase(getOwnerOfListing.fulfilled, (state, action)=>{
+                state.status = 'success';
+                state.listingUser = action.payload;
+            })
+            .addCase(getOwnerOfListing.rejected,(state, action)=>{
                 state.status = "error";
                 state.error = action.payload;
             })

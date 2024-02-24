@@ -13,9 +13,9 @@ const Listing = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const {user} = useSelector((state)=> state.auth);
-  const {error, status, listing} = useSelector((state)=> state.listing);
+  const {error, status, listing, singleList} = useSelector((state)=> state.listing);
 
-
+  
 
   const [files, setFiles] = useState([]);
   const [formData, setFormData] = useState({
@@ -39,7 +39,9 @@ const Listing = () => {
 
   const handleImageSubmit = (e) =>{
     setLoading(true);
+    
     setImageUpdloadError(false)
+
     if(files.length > 0 && files.length + formData.imageUrls.length < 7){
       const promises = [];
       for(let i = 0; i < files.length; i++){
@@ -106,12 +108,15 @@ const Listing = () => {
       if(formData.discountedPrice > formData.regularPrice){
         console.log(formData.discountedPrice);
         console.log(formData.regularPrice);
+
         return dispatch(setCustomisedError("Discounted Price must be less than Regular price"))
       }
           
       dispatch(createListing(formData));
       
-      navigate(`/listing/${listing._id}`);
+      console.log("Single listing", singleList);
+
+      navigate(`/listing/${singleList._id}`);
       
       if(error){
         dispatch(clearErrors());
@@ -178,7 +183,7 @@ const Listing = () => {
         </div>
         <div className="list-price">
           <div className="">
-          <input type="number" min="1000" max="100000" name='regularPrice' required value={formData.regularPrice} onChange={handleChange}/>
+          <input type="number" min="1000" max="10000000" name='regularPrice' required value={formData.regularPrice} onChange={handleChange}/>
             <div className="">
               <p>Regular Price</p>
               <p style={{fontSize:"14px"}}>{"$/Month"}</p>

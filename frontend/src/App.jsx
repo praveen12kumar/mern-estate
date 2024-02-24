@@ -10,6 +10,8 @@ import ProtectedRoute from './components/ProtectedRoute';
 import Listing from './features/listing/Listing.jsx';
 import SingleList from './features/listing/SingleList.jsx';
 import UpdateListing from './features/listing/UpdateListing.jsx';
+import Search from './pages/Search.jsx';
+
 
 const App = () => {
   return (
@@ -24,8 +26,10 @@ const App = () => {
           <Profile/>
         </ProtectedRoute>}/>
         <Route path='/listing' element={<Listing/>}/>
+        <Route path='/search' element={<Search/>}/>
         <Route path='/listing/:id' element={<SingleList/>}/>
         <Route path='/update-listing/:id' element={<UpdateListing/>}/>
+       
     </Routes>
     </div>
   )

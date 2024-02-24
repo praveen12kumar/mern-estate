@@ -18,6 +18,7 @@ export const createListing = createAsyncThunk("listing/createListing", async(for
             }
         }
         const {data} = await axios.post("/api/v1/listing/create", {...formData}, config);
+        // console.log("createListing", data);
         return data;
     } catch (error) {
         return thunkApi.rejectWithValue(error.response.data);       
@@ -52,7 +53,7 @@ export const updateUserListing = createAsyncThunk("listing/updateUserListing",as
             "Content-Type": "application/json"
         }
         const {data} = await axios.put(`/api/v1/listing/update/${id}`,{...formData}, config) 
-        // console.log("data", data);
+        console.log("update user list data", data);
         return data;
     } catch (error) {
         return thunkApi.rejectWithValue(error.response.message);
@@ -60,8 +61,10 @@ export const updateUserListing = createAsyncThunk("listing/updateUserListing",as
 })
 
 export const getAListing = createAsyncThunk("listing/getAListing", async(id, thunkApi)=>{
+    console.log("getAListing", id);
     try {
         const {data} = await axios.get(`/api/v1/listing/list/${id}`);
+        // console.log("getAListing", data);
         return data;
     } catch (error) {
         return thunkApi.rejectWithValue(error.response.message); 
@@ -74,6 +77,17 @@ export const getOwnerOfListing = createAsyncThunk("listing/getOwnerOfListing", a
         // console.log(data);
         return data;
 
+    } catch (error) {
+        return thunkApi.rejectWithValue(error.response.message);
+    }
+})
+
+
+export const searchListing = createAsyncThunk("listing/searchListing", async(searchQuery, thunkApi)=>{
+    try {
+        const {data} = await axios.get(`/api/v1/listing/list?${searchQuery}`);
+        console.log(data);
+        return data;
     } catch (error) {
         return thunkApi.rejectWithValue(error.response.message);
     }
@@ -103,6 +117,7 @@ export const listingSlice = createSlice({
             })
             .addCase(createListing.fulfilled, (state, action)=>{
                 state.listing.push(action.payload.listing);
+                state.singleList = action.payload.listing;
                 state.status = "success";
             })
             .addCase(createListing.rejected, (state, action)=>{
@@ -144,6 +159,8 @@ export const listingSlice = createSlice({
                 // );
                 const index = state.listing.findIndex(list => list._id === action.payload.listing._id);
                 state.listing.splice(index,1, action.payload.listing);
+                console.log("listing state",state.listing)
+                state.singleList = action.payload.listing;
             })
             .addCase(updateUserListing.rejected, (state, action)=>{
                 state.status = "error";
@@ -154,7 +171,7 @@ export const listingSlice = createSlice({
             })
             .addCase(getAListing.fulfilled, (state, action)=>{
                 state.status = "success";
-                state.singleList = action.payload;
+                state.singleList = action.payload.listing;
             })
             .addCase(getAListing.rejected, (state, action)=>{
                 state.status = "error";
@@ -168,6 +185,17 @@ export const listingSlice = createSlice({
                 state.listingUser = action.payload;
             })
             .addCase(getOwnerOfListing.rejected,(state, action)=>{
+                state.status = "error";
+                state.error = action.payload;
+            })
+            .addCase(searchListing.pending, (state)=>{
+                state.status = "pending";
+            })
+            .addCase(searchListing.fulfilled, (state, action)=>{
+                state.status = 'success';
+                state.listing = action.payload.listings;
+            })
+            .addCase(searchListing.rejected, (state, action)=>{
                 state.status = "error";
                 state.error = action.payload;
             })

@@ -24,7 +24,8 @@ const SingleList = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const {id} = useParams();
-  
+ 
+
   const [copied, setCopied] = useState(false);
   const [listingData, setListingData ] = useState(null);
   const [contact, setContact] = useState(false);
@@ -35,10 +36,12 @@ const SingleList = () => {
   const{user} = useSelector((state)=> state.auth);
 
   useEffect(()=>{
-    // console.log("id", id);
     dispatch(getAListing(id));
-    setListingData({...singleList.listing});
+    console.log("singleList", singleList);
+    setListingData(singleList);
   }, [id]);
+
+
 
   return (
     <div className='single-list'>
@@ -54,7 +57,7 @@ const SingleList = () => {
                 listingData && <>
                   <Swiper navigation >
                     {
-                      listingData.imageUrls.map((url)=>(
+                      listingData?.imageUrls?.map((url)=>(
                         <SwiperSlide key={url}>
                           <div style={{height:"500px", background:`url(${url}) center no-repeat`}}>
                           </div>

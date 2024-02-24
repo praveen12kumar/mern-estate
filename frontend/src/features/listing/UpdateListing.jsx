@@ -15,12 +15,14 @@ const UpdateListing = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   
-  const {error, status, listing, singleList} = useSelector((state)=> state.listing);
+  const {error, status, singleList} = useSelector((state)=> state.listing);
 
   const {id} = useParams();
- 
+  console.log("id at update", id);
+
+
   const [files, setFiles] = useState([]);
-  const [formData, setFormData] = useState({...singleList.listing});
+  const [formData, setFormData] = useState(singleList);
   
 
   const [imageUpdloadError, setImageUpdloadError] = useState(false);
@@ -111,7 +113,7 @@ const UpdateListing = () => {
     useEffect(()=>{
       dispatch(clearErrors());
       dispatch(getAListing(id))
-    },[])
+    },[id])
 
 
   return (

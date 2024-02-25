@@ -7,8 +7,10 @@ const initialState = {
     singleList:{},
     error:null,
     status:"idle",
+    offer:[],
+    rent:[],
+    sale:[],
 }
-
 
 export const createListing = createAsyncThunk("listing/createListing", async(formData, thunkApi)=>{
     try {
@@ -86,12 +88,44 @@ export const getOwnerOfListing = createAsyncThunk("listing/getOwnerOfListing", a
 export const searchListing = createAsyncThunk("listing/searchListing", async(searchQuery, thunkApi)=>{
     try {
         const {data} = await axios.get(`/api/v1/listing/list?${searchQuery}`);
-        console.log(data);
+        // console.log(data);
         return data;
     } catch (error) {
         return thunkApi.rejectWithValue(error.response.message);
     }
-})
+});
+
+
+export const searchOffer = createAsyncThunk("offer/searchOffer", async(thunkApi)=>{
+    try {
+        const {data} = await axios.get(`/api/v1/listing/list?offer=true&limit=4`);
+        //console.log(data);
+        return data
+    } catch (error) {
+        return thunkApi.rejectWithValue(error.response.message);
+    }
+});
+
+export const searchSales = createAsyncThunk("sale/searchSales", async(thunkApi)=>{
+    try {
+        const {data} = await axios.get(`/api/v1/listing/list?type=sale&limit=4`);
+        //console.log(data);
+        return data
+    } catch (error) {
+        return thunkApi.rejectWithValue(error.response.message);
+    }
+});
+
+
+export const searchRent = createAsyncThunk("rent", async(searchQuery, thunkApi)=>{
+    try {
+        const {data} = await axios.get(`/api/v1/listing/list?type=rent&limit=4`);
+        //console.log(data);
+        return data
+    } catch (error) {
+        return thunkApi.rejectWithValue(error.response.message);
+    }
+});
 
 
 
@@ -199,7 +233,39 @@ export const listingSlice = createSlice({
                 state.status = "error";
                 state.error = action.payload;
             })
-            
+            .addCase(searchOffer.pending,(state)=>{
+                state.status = "pending";
+            })
+            .addCase(searchOffer.fulfilled, (state, action)=>{
+                state.status = 'success';
+                state.offer = action.payload.listings;
+            })
+            .addCase(searchOffer.rejected, (state, action)=>{
+                state.error = action.payload;
+                state.status = "error";
+            })
+            .addCase(searchRent.pending,(state)=>{
+                state.status = "pending";
+            })
+            .addCase(searchRent.fulfilled, (state, action)=>{
+                state.status = 'success';
+                state.rent = action.payload.listings;
+            })
+            .addCase(searchRent.rejected, (state, action)=>{
+                state.error = action.payload;
+                state.status = "error";
+            })
+            .addCase(searchSales.pending,(state)=>{
+                state.status = "pending";
+            })
+            .addCase(searchSales.fulfilled, (state, action)=>{
+                state.status = 'success';
+                state.sale = action.payload.listings;
+            })
+            .addCase(searchSales.rejected, (state, action)=>{
+                state.error = action.payload;
+                state.status = "error";
+            })
     }
 });
 

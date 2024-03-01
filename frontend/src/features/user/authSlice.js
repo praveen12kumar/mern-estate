@@ -138,7 +138,6 @@ export const authSlice = createSlice({
                 state.status = "success";
                 state.user = action.payload.user;
                 state.isAuthenticated = true;
-                state.error = null;
             })
             .addCase(loginUser.rejected, (state, action)=>{
                 state.status = "error";
@@ -198,6 +197,7 @@ export const authSlice = createSlice({
                 state.user = {};
                 state.isAuthenticated = false;
                 state.message = action.payload.message;
+                state.status = "idle";
             })
             .addCase(logoutUser.rejected, (state, action)=>{
                 state.error = action.payload.message;

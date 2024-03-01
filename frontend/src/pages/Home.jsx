@@ -13,7 +13,7 @@ const Home = () => {
   const dispatch = useDispatch();
 
   const {offer, rent, sale} = useSelector((state)=> state.listing);
-  console.log(offer);
+  
   SwiperCore.use([Navigation]);
 
 
@@ -54,15 +54,15 @@ const Home = () => {
       <Swiper navigation>
         {offer &&
           offer.length > 0 &&
-          offer.map((listing) => (
-            <SwiperSlide>
-              <div
+          offer.map((listing, index) => (
+            <SwiperSlide key={index}>
+              <div 
                 style={{
                   background: `url(${listing.imageUrls[0]}) center no-repeat`,
                   backgroundSize: 'cover',
                 }}
                 className='h-[500px]'
-                key={listing._id}
+                
               ></div>
             </SwiperSlide>
           ))}

@@ -6,11 +6,17 @@ import { sendToken } from "../utils/jwtToken.js";
 const register = async(req, res, next)=>{
     try {
         const {username, email, password} = req.body;
-
-        let user = await User.findOne({email});
+        if(!username || !email || !password){
+            return res.status(401).json({
+                message: "Enter username or email or password",
+            })
+        }
+        let user = await User.findOne({
+            $or:[{username}, {email}]
+        });
 
         if(user){
-            return next(errorHandler(409, "user already registered"))
+            return next(errorHandler(409, "User with email or username already exists"))
         }
 
         const hassedPassword = bcryptjs.hashSync(password, 10);

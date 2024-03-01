@@ -12,6 +12,8 @@ const Register = () => {
   const dispatch =  useDispatch();
   const {error, status} = useSelector((state)=> state.auth);
 
+  console.log("error", error, "status", status);
+
   const [formData, setformData] = useState({
     username:"",
     email:"",
@@ -29,18 +31,23 @@ const Register = () => {
       e.preventDefault()
       dispatch(registerUser({...formData}));
 
-      if(error){
+      if(status !== "pending" || error){
         dispatch(clearErrors());
       }
       
   }
 
   useEffect(()=>{
-    dispatch(clearErrors());
     if(status === "success"){
+      setformData({
+        username:"",
+        email:"",
+        password:""
+      });
       navigate("/login");
+      dispatch(clearStatus());
     }
-  }, [status])
+  }, [status, navigate])
 
 
   return (

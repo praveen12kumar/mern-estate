@@ -12,14 +12,13 @@ const Login = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
-  const {error, status, user} = useSelector(state => state.auth);
-  console.log(user);
+  const {error, status} = useSelector(state => state.auth);
+  
   
   const [formData, setformData] = useState({
     email:"",
     password:""
   });
-
 
 
   const handleInput = (e)=>{
@@ -31,23 +30,21 @@ const Login = () => {
   const handleSubmit = (e)=>{
       e.preventDefault();
       dispatch(loginUser({...formData}));
-      if(error){
-        dispatch(clearErrors());
-      }
-      navigate("/");
-     
-  }
 
+      if (status !== "pending" || error) {
+        dispatch(clearErrors());
+     }
+  }
   useEffect(()=>{
-    dispatch(clearStatus());
     if(status=="success"){
       setformData({
         email:"",
         password:""
       });
+      navigate("/");
+      dispatch(clearStatus());
     }
-
-  },[user, navigate, status])
+  },[status, navigate])
 
   return (
     <div className="register">

@@ -1,6 +1,6 @@
 
 // creating token and saving in cookie
-import { errorHandler } from "./errorHandler.js"
+
 
 const sendToken = (user, statusCode, res) => {
     try {
@@ -23,6 +23,7 @@ const sendToken = (user, statusCode, res) => {
                 avatar:user.avatar,
                 // ... other necessary fields
             },
+            message:"Login successful",
             token,
         });
     } catch (error) {

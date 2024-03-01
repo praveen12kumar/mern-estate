@@ -1,7 +1,5 @@
 import React, {useEffect, useState} from 'react';
-import { useSelector, useDispatch } from 'react-redux';
-import { getAListing } from './listSlice';
-import { useNavigate, useParams } from 'react-router-dom';
+import { useSelector } from 'react-redux';
 import Loader from '../../components/loader/Loader';
 import SwiperCore from "swiper";
 import {Swiper, SwiperSlide} from 'swiper/react';
@@ -20,26 +18,17 @@ import "./singleList.scss";
 
 
 const SingleList = () => {
+  
   SwiperCore.use([Navigation]);
-  const navigate = useNavigate();
-  const dispatch = useDispatch();
-  const {id} = useParams();
  
-
   const [copied, setCopied] = useState(false);
-  const [listingData, setListingData ] = useState(null);
   const [contact, setContact] = useState(false);
-
-
 
   const{singleList, status, error} = useSelector((state)=> state.listing);
   const{user} = useSelector((state)=> state.auth);
 
-  useEffect(()=>{
-    dispatch(getAListing(id));
-    console.log("singleList", singleList);
-    setListingData(singleList);
-  }, [id]);
+
+  //console.log("singleList", singleList);
 
 
 
@@ -54,10 +43,10 @@ const SingleList = () => {
             (
               <>
               {
-                listingData && <>
+                singleList && <>
                   <Swiper navigation >
                     {
-                      listingData?.imageUrls?.map((url)=>(
+                      singleList?.imageUrls?.map((url)=>(
                         <SwiperSlide key={url}>
                           <div style={{height:"500px", background:`url(${url}) center no-repeat`}}>
                           </div>
@@ -87,31 +76,31 @@ const SingleList = () => {
       )
      }
      <div className="flex flex-col gap-3  max-w-4xl mx-auto p-3 m-10 ">
-      <h1 className='text-3xl my-4 font-primary font-semibold'>{listingData?.name}</h1>
+      <h1 className='text-3xl my-4 font-primary font-semibold'>{singleList?.name}</h1>
       <div className="flex items-center gap-2 ">
-        <span className='text-green-600'><FaLocationDot className='text-xl'/></span><p className='text-slate-600 font-medium text-xl font-primary'>{listingData?.address}</p>
+        <span className='text-green-600'><FaLocationDot className='text-xl'/></span><p className='text-slate-600 font-medium text-xl font-primary'>{singleList?.address}</p>
       </div>
       <div className="flex gap-6">
         <button className='bg-red-700 text-xl text-white px-20 py-2 rounded-lg cursor-pointer transition-all duration-200 ease-in hover:opacity-90'>For Rent</button>
-        <button className='bg-green-700 text-xl text-white px-20 py-2 rounded-lg cursor-pointer transition-all duration-200 ease-in hover:opacity-90'>₹{listingData?.discountedPrice}{" "}discount</button>
+        <button className='bg-green-700 text-xl text-white px-20 py-2 rounded-lg cursor-pointer transition-all duration-200 ease-in hover:opacity-90'>₹{singleList?.discountedPrice}{" "}discount</button>
       </div>
       <div className="my-3">
         <span className='font-semibold text-xl' >Description - </span>
-        {listingData?.description}
+        {singleList?.description}
       </div>
       <div className="flex gap-6 items-center">
-        <p className='flex items-center text-green-700 gap-2 text-lg font-primary'><FaBed/>{listingData?.bedrooms} Beds</p>
-        <p className='flex items-center text-green-700 gap-2 text-lg font-primary'><FaBath/>{listingData?.bathrooms} Baths</p>
-        <p className='flex items-center text-green-700 gap-2 text-lg font-primary'><FaParking/>{listingData?.parking ? "" : "No"} Parking </p>
-        <p className='flex items-center text-green-700 gap-2 text-lg font-primary'><FaChair/>{listingData?.furnished ? "Fully" : "Semi"} Furnished </p>
+        <p className='flex items-center text-green-700 gap-2 text-lg font-primary'><FaBed/>{singleList?.bedrooms} Beds</p>
+        <p className='flex items-center text-green-700 gap-2 text-lg font-primary'><FaBath/>{singleList?.bathrooms} Baths</p>
+        <p className='flex items-center text-green-700 gap-2 text-lg font-primary'><FaParking/>{singleList?.parking ? "" : "No"} Parking </p>
+        <p className='flex items-center text-green-700 gap-2 text-lg font-primary'><FaChair/>{singleList?.furnished ? "Fully" : "Semi"} Furnished </p>
       </div>
       {
-        user && listingData?.userRef !== user?._id && !contact && (
+        user && singleList?.userRef !== user?._id && !contact && (
           <button onClick={()=> setContact(true)} className='bg-slate-700 text-white px-32 py-3 my-5 font-primaryt font-semibold rounded-lg uppercase tracking-wider transition-all duration-200 ease-in hover:opacity-90 '>Contact Landlord</button>
         )
       }
       {
-        contact && <Contact listingData = {listingData} />
+        contact && <Contact listingData = {singleList} />
       }
       
      </div>

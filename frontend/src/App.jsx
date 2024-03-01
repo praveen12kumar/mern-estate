@@ -27,9 +27,8 @@ const App = () => {
         </ProtectedRoute>}/>
         <Route path='/listing' element={<Listing/>}/>
         <Route path='/search' element={<Search/>}/>
-        <Route path='/listing/:id' element={<SingleList/>}/>
         <Route path='/update-listing/:id' element={<UpdateListing/>}/>
-       
+        <Route path='/listing/:id' element={<SingleList/>}/>
     </Routes>
     </div>
   )

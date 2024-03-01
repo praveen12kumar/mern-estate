@@ -1,15 +1,27 @@
 import React from 'react'
-import { Link } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { FaLocationDot } from "react-icons/fa6";
 import { FaBed } from "react-icons/fa";
 import { FaBath } from "react-icons/fa";
+import { useDispatch, useSelector } from 'react-redux';
+import { getAListing } from '../../features/listing/listSlice';
 
 
 const ListCart = ({list}) => {
-    
+  const navigate   = useNavigate();
+  const dispatch = useDispatch();
+
+  const {singleList} = useSelector(state => state.listing);
+  
+
+  const handleClick = async()=>{
+    dispatch(getAListing(list?._id));
+    navigate(`/listing/${list?._id}`)
+  }
+
   return (
     <div className='m-3 w-[300px] bg-white shadow-md hover:shadow-lg transition-shadow duration-1000 overflow-hidden rounded-lg'>
-      <Link to={`/listing/${list?._id}`}>
+      <div onClick={handleClick}>
         <img src={list?.imageUrls[0]} alt="listing cover" className='h-[320px]
             sm:h-[220px] w-full object-cover hover:scale-110 transition-scale duration-500' />
         
@@ -26,7 +38,7 @@ const ListCart = ({list}) => {
                 <p className=' text-lg flex items-center gap-1 font-semibold'><span><FaBath className='text-green-600'/></span> <span>{list?.bathrooms}</span>Bath</p>
             </div>
         </div>
-      </Link>
+      </div>
     </div>
   )
 }

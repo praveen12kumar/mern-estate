@@ -10,7 +10,6 @@ const Search = () => {
      const navigate = useNavigate();
 
      const {listing, status} = useSelector(state => state.listing);
-    console.log("status", status);
     const [sidebarData, setSidebarData] = useState({
         searchTerm: '',
         type: 'all',

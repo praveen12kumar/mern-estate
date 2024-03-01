@@ -63,10 +63,10 @@ export const updateUserListing = createAsyncThunk("listing/updateUserListing",as
 })
 
 export const getAListing = createAsyncThunk("listing/getAListing", async(id, thunkApi)=>{
-    console.log("getAListing", id);
+    console.log("getAListing ID", id);
     try {
         const {data} = await axios.get(`/api/v1/listing/list/${id}`);
-        // console.log("getAListing", data);
+        console.log("getAListing DATA", data);
         return data;
     } catch (error) {
         return thunkApi.rejectWithValue(error.response.message); 

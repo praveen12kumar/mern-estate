@@ -94,9 +94,8 @@ const UpdateListing = () => {
       if(formData.imageUrls.length < 1){
         return setImageUpdloadError("Please upload atleast one image");
       }
-      if(formData.discountedPrice > formData.regularPrice){
-        console.log(formData.discountedPrice);
-        console.log(formData.regularPrice);
+      if( Number(formData.discountedPrice) > Number( formData.regularPrice)){
+        
         return dispatch(setCustomisedError("Discounted Price must be less than Regular price"))
       }
           
@@ -174,13 +173,20 @@ const UpdateListing = () => {
               <p style={{fontSize:"14px"}}>{"$/Month"}</p>
             </div>
           </div>
-          <div className="">
-          <input type="number" min="0" max="100000" name='discountedPrice' required value={formData.discountedPrice} onChange={handleChange} />
+          {
+            formData.offer && 
             <div className="">
-              <p>Discounted Price</p>
-              <p style={{fontSize:"14px"}}>{"$/Month"}</p>
+            <input type="number" min="0" max="100000" name='discountedPrice' required value={formData.discountedPrice} onChange={handleChange} />
+              <div className="">
+                <p>Discounted Price</p>
+                {
+                  formData.type === "rent" && (
+                    <p style={{fontSize:"14px"}}>{"$/Month"}</p>
+                  )
+                }
+              </div>
             </div>
-          </div>
+          }
         </div>
         {
           error && <p style={{color:"red", fontSize:"14px"}} >{error}</p>

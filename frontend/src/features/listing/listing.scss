@@ -90,9 +90,12 @@
                 margin: 1rem 0;
                 >div{
                     display: flex;
+                    align-items: center;
                     gap: 20px;
                     >input{
-                        padding-left: 15px;
+                        width: 8rem;
+                        padding: 15px;
+                        border-radius: 10px;
                     }
 
                     >p{

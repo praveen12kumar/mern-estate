@@ -71,7 +71,6 @@ const Search = () => {
 
               const searchQuery = urlParams.toString();
               navigate(`/search?${searchQuery}`)
-
     }
 
     useEffect(() => {
@@ -182,7 +181,7 @@ const Search = () => {
                 status === "pending" ? <Loader/> : 
                 (
                   listing?.map((list)=>
-                  (<ListCart list={list}/>))
+                  (<ListCart list={list} key={list._id}/>))
                 )
               }
 

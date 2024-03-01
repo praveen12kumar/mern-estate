@@ -132,7 +132,7 @@ const Profile = () => {
         <span onClick={handleLogout}>Logout</span>
       </div>
       <p>{error ? error : ""}</p>
-      <button onClick={handleShowListing}>Show Listing</button>
+      <button onClick={()=>handleShowListing}>Show Listing</button>
       {
         listing && listing?.map((list)=>(
           <div className="user-listing" key={list._id}>

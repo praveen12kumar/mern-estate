@@ -13,8 +13,8 @@ const listSchema =  new mongoose.Schema({
         required:true,
     },
     regularPrice:{
-        required:true,
         type:Number,
+        required:true,
     },
     discountedPrice:{
         type:Number,
